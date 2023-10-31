@@ -1,9 +1,8 @@
-import {Dimensions, Text, View} from 'react-native';
-import React from 'react';
-import Carousel from 'react-native-snap-carousel-v4';
-import MovieCard from './MovieCard';
 import {useNavigation} from '@react-navigation/native';
-
+import Carousel from 'react-native-snap-carousel-v4';
+import {Dimensions, Text, View} from 'react-native';
+import MovieCard from './MovieCard';
+import React from 'react';
 interface Movie {
   // Defina aqui a estrutura dos dados do filme.
   // Por exemplo: title, poster, rating, etc.
@@ -12,12 +11,13 @@ interface Movie {
 interface TrendingMoviesProps {
   data: Movie[];
 }
+
 const {width, height} = Dimensions.get('window');
 
 const TrendingMovies: React.FC<TrendingMoviesProps> = ({data}) => {
   const navigation = useNavigation();
 
-  const handleClick = () => {
+  const handleClick = item => {
     navigation.navigate('Movie', item);
   };
 
@@ -27,7 +27,7 @@ const TrendingMovies: React.FC<TrendingMoviesProps> = ({data}) => {
       <Carousel
         data={data}
         renderItem={({item}) => (
-          <MovieCard item={item} handleClick={handleClick} />
+          <MovieCard item={item} handleClick={() => handleClick(item)} />
         )}
         firstItem={1}
         inactiveSlideOpacity={0.6}

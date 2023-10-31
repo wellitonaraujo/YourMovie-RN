@@ -1,16 +1,9 @@
 import {useNavigation} from '@react-navigation/native';
 import Carousel from 'react-native-snap-carousel-v4';
+import {TrendingMoviesProps} from '../models/movie';
 import {Dimensions, Text, View} from 'react-native';
 import MovieCard from './MovieCard';
 import React from 'react';
-interface Movie {
-  // Defina aqui a estrutura dos dados do filme.
-  // Por exemplo: title, poster, rating, etc.
-}
-
-interface TrendingMoviesProps {
-  data: Movie[];
-}
 
 const {width, height} = Dimensions.get('window');
 

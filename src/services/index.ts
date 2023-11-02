@@ -17,6 +17,12 @@ const movieCredits = (id: number) =>
 const simularMovies = (id: number) =>
   `${baseUrl}/movie/${id}/similar?api_key=${apikey}&language=pt-BR'`;
 
+const personMovies = (id: number) =>
+  `${baseUrl}/person/${id}?api_key=${apikey}'`;
+
+const personDetails = (id: number) =>
+  `${baseUrl}/person/${id}/movie_credits?api_key=${apikey}`;
+
 // returns
 export const fetchTrendingMovies = () => {
   return api(trendingMovies);
@@ -41,4 +47,12 @@ export const fetchMovieCredits = (id: number) => {
 
 export const fetchMovieSimular = (id: number) => {
   return api(simularMovies(id));
+};
+
+export const fetchPersonDetails = (id: number) => {
+  return api(personDetails(id));
+};
+
+export const fetchPersonMovies = (id: number) => {
+  return api(personMovies(id));
 };

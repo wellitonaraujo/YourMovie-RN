@@ -9,7 +9,7 @@ export const api = async (endpoint: string, params?: any): Promise<any> => {
     params: params ? params : {},
     headers: {
       accept: 'application/json',
-      Authorization: `Bearer ${tokenApi}`,
+      Authorization: `Bearer ${process.env.TOKEN}`,
     },
   };
 

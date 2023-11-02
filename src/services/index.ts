@@ -1,6 +1,7 @@
 import {baseUrl} from '../constants/baseUrl';
-import {apikey} from '../constants/apikey';
 import {api} from './api';
+
+const apikey = process.env.API_TOKEN;
 
 // endpoints
 const trendingMovies = `${baseUrl}/trending/movie/day?api_key=${apikey}&language=pt-BR'`;

@@ -1,10 +1,10 @@
 import {View, Text, ScrollView, TouchableOpacity, Image} from 'react-native';
-import React from 'react';
 import {image185} from '../constants/imagesPath';
+import React from 'react';
+import {CastProps} from '../models/castMember';
+import {fallbackMovie} from '../constants/fallbackMovie';
 
-const Cast = ({cast, navigation}) => {
-  let person = 'Keanu Reevs';
-
+const Cast: React.FC<CastProps> = ({cast, navigation}) => {
   return (
     <View className="my-6">
       <Text className="text-white text-lg mx-4 mb-5">Elenco principal</Text>
@@ -15,14 +15,13 @@ const Cast = ({cast, navigation}) => {
         {cast &&
           cast.map((person, index) => {
             return (
-              <TouchableOpacity
-                key={index}
-                className="mr-4 items-center"
-                onPress={() => navigation.navigate('Person', person)}>
+              <TouchableOpacity key={index} className="mr-4 items-center">
                 <View className="overflow-hidden rounded-full h-20, w-20 items-center border border-neutral-500">
                   <Image
                     className="rounded-2xl  w-20 h-20"
-                    source={{uri: image185(person?.profile_path)}}
+                    source={{
+                      uri: image185(person?.profile_path) || fallbackMovie,
+                    }}
                   />
                 </View>
 

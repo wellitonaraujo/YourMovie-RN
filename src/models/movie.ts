@@ -1,6 +1,12 @@
 interface Movie {
-  // Defina aqui a estrutura dos dados do filme.
-  // Por exemplo: title, poster, rating, etc.
+  id: number;
+  title: string;
+  poster_path: string | null;
+  status: string;
+  release_date: string | null;
+  runtime: number;
+  genres: {name: string}[];
+  overview: string;
 }
 
 export interface TrendingMoviesProps {

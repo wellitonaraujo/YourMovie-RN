@@ -8,40 +8,40 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {ChevronLeftIcon, HeartIcon} from 'react-native-heroicons/solid';
-import React, {useEffect, useState} from 'react';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import Cast from '../components/Cast';
-import MovieList from '../components/MovieList';
 import {
   fetchMovieCredits,
   fetchMovieDetails,
   fetchMovieSimular,
 } from '../services';
+import {ChevronLeftIcon, HeartIcon} from 'react-native-heroicons/solid';
+import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
 import {image500} from '../constants/imagesPath';
+import MovieList from '../components/MovieList';
+import {CastMember, MovieProps} from '../models/castMember';
+import Cast from '../components/Cast';
+import {fallbackMovie} from '../constants/fallbackMovie';
 
 const {width, height} = Dimensions.get('window');
 const isOS = Platform.OS == 'ios';
 const topMargin = isOS ? '' : 'mt-3';
 
-interface Movie {
-  poster_path: string;
-  title: string;
-  status: string;
-  release_date: number;
-}
-
-type MovieState = Movie[];
+type RouteParams = {
+  RouteProp: {
+    id: number;
+  };
+};
 
 const Movie = () => {
+  const [similarMovies, setSimilarMovies] = useState<MovieProps[]>([]);
+  const [movie, setMovie] = useState<MovieProps>();
   const [isFavorite, setIsFavorite] = useState(false);
+  const [cast, setCast] = useState<CastMember[]>([]);
   const [loading, setLoading] = useState(false);
-  const [movie, setMovie] = useState<MovieState>([]);
-  const [cast, setCast] = useState([]);
-  const [similarMovies, setSimilarMovies] = useState([]);
+
   const navigation = useNavigation();
 
-  const {params: item} = useRoute();
+  const {params: item} = useRoute<RouteProp<RouteParams>>();
 
   const getMovieDetails = async (id: number) => {
     const data = await fetchMovieDetails(id);
@@ -97,7 +97,12 @@ const Movie = () => {
 
         <View>
           <Image
-            source={{uri: image500(movie?.poster_path)}}
+            source={{
+              uri:
+                image500(
+                  movie?.poster_path ? movie?.poster_path : fallbackMovie,
+                ) || fallbackMovie,
+            }}
             style={{width, height: height * 0.55}}
           />
         </View>

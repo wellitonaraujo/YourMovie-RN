@@ -5,7 +5,7 @@ import {Dimensions, Text, View} from 'react-native';
 import MovieCard from './MovieCard';
 import React from 'react';
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const TrendingMovies: React.FC<TrendingMoviesProps> = ({data}) => {
   const navigation = useNavigation();

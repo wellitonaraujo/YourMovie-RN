@@ -6,15 +6,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+
+import {fallbackMovie} from '../constants/fallbackMovie';
 import {useNavigation} from '@react-navigation/native';
+import {TrendingMoviesProps} from '../models/movie';
 import {image185} from '../constants/imagesPath';
-import {styles} from '../styles';
-interface TrendingMoviesProps {
-  title: string;
-  hideSeeAll: boolean;
-  data: any[];
-}
+import React from 'react';
 
 const {width, height} = Dimensions.get('window');
 
@@ -48,7 +45,7 @@ const MovieList = ({title, data, hideSeeAll}: TrendingMoviesProps) => {
                 onPress={() => navigation.navigate('Movie', item)}>
                 <View className="space-y-1 mr-4">
                   <Image
-                    source={{uri: image185(item.poster_path)}}
+                    source={{uri: image185(item.poster_path) || fallbackMovie}}
                     className="rounded-3xl"
                     style={{width: width * 0.33, height: height * 0.22}}
                   />

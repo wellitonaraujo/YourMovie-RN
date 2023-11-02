@@ -9,15 +9,16 @@ import {
 } from 'react-native';
 import {MagnifyingGlassIcon} from 'react-native-heroicons/outline';
 import TrendingMovies from '../components/TrendingMovies';
+import React, {useEffect, useState} from 'react';
 import MovieList from '../components/MovieList';
 import BarIcon from '../components/BarIcon';
-import React, {useEffect, useState} from 'react';
+
 import {styles} from '../styles';
 import {
   fetchTopRatedMovies,
   fetchTrendingMovies,
   fetchUpcomingMovies,
-} from '../services/api';
+} from '../services';
 
 const isOS = Platform.OS == 'ios';
 
@@ -55,7 +56,7 @@ const Home = () => {
 
   return (
     <View className="flex-1 bg-neutral-800">
-      <SafeAreaView className={isOS ? '-m-2' : '-mb-3'}>
+      <SafeAreaView className={isOS ? '-mb-1' : '-mb-3'}>
         <StatusBar barStyle={'light-content'} />
         <View className="flex-row justify-between items-center mx-4">
           <BarIcon />
@@ -69,9 +70,7 @@ const Home = () => {
         </View>
       </SafeAreaView>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: 10}}>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {trending.length > 0 && <TrendingMovies data={trending} />}
 
         {/* Trending Movies carousel */}

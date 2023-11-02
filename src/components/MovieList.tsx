@@ -6,10 +6,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
-import {MagnifyingGlassIcon} from 'react-native-heroicons/outline';
+import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {image500, image342, image185} from '../services/api';
+import {image185} from '../constants/imagesPath';
 import {styles} from '../styles';
 interface TrendingMoviesProps {
   title: string;
@@ -25,15 +24,16 @@ const MovieList = ({title, data, hideSeeAll}: TrendingMoviesProps) => {
   return (
     <View className="mb-8 space-y-4">
       <View className="mx-4 flex-row justify-between items-center">
-        <Text className="text-white text-xl">{title}</Text>
+        <Text className="text-white text-lg">{title}</Text>
 
-        {!hideSeeAll && (
+        {/* {!hideSeeAll && (
           <TouchableOpacity>
-            <Text style={styles.text} className="text-lg">
+            <Text style={styles.text} className="text-sg">
               Ver tudo
             </Text>
           </TouchableOpacity>
         )}
+        */}
       </View>
 
       <ScrollView
@@ -46,7 +46,7 @@ const MovieList = ({title, data, hideSeeAll}: TrendingMoviesProps) => {
               <TouchableOpacity
                 key={index}
                 onPress={() => navigation.navigate('Movie', item)}>
-                <View className="space-y-1 mr-1">
+                <View className="space-y-1 mr-4">
                   <Image
                     source={{uri: image185(item.poster_path)}}
                     className="rounded-3xl"
@@ -54,13 +54,14 @@ const MovieList = ({title, data, hideSeeAll}: TrendingMoviesProps) => {
                   />
                 </View>
 
-                <Text className="text-neutral-300 ml-1">
+                {/* <Text className="text-neutral-300 mt-2">
                   {item && item.title
-                    ? item.title.length > 14
-                      ? item.title.slice(0, 14) + '...'
+                    ? item.title.length > 15
+                      ? item.title.slice(0, 15) + '...'
                       : item.title
-                    : 'Item sem título'}
+                    : 'Sem título'}
                 </Text>
+                */}
               </TouchableOpacity>
             );
           })

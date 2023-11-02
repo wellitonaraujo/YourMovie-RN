@@ -13,22 +13,59 @@ import React, {useEffect, useState} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Cast from '../components/Cast';
 import MovieList from '../components/MovieList';
+import {
+  fetchMovieCredits,
+  fetchMovieDetails,
+  fetchMovieSimular,
+} from '../services';
+import {image500} from '../constants/imagesPath';
 
 const {width, height} = Dimensions.get('window');
 const isOS = Platform.OS == 'ios';
 const topMargin = isOS ? '' : 'mt-3';
 
+interface Movie {
+  poster_path: string;
+  title: string;
+  status: string;
+  release_date: number;
+}
+
+type MovieState = Movie[];
+
 const Movie = () => {
   const [isFavorite, setIsFavorite] = useState(false);
-  const [cast, setCast] = useState([1, 2, 3, 4, 5]);
-  const [similarMovies, setSimilarMovies] = useState([1, 2, 3, 4, 5]);
-
-  const movie = 'Um fime top e muito maluco pode pah';
+  const [loading, setLoading] = useState(false);
+  const [movie, setMovie] = useState<MovieState>([]);
+  const [cast, setCast] = useState([]);
+  const [similarMovies, setSimilarMovies] = useState([]);
   const navigation = useNavigation();
 
   const {params: item} = useRoute();
 
-  useEffect(() => {}, [item]);
+  const getMovieDetails = async (id: number) => {
+    const data = await fetchMovieDetails(id);
+    if (data) setMovie(data);
+    setLoading(false);
+  };
+
+  const getMovieCredits = async (id: number) => {
+    const data = await fetchMovieCredits(id);
+    if (data && data.cast) setCast(data.cast);
+    setLoading(false);
+  };
+
+  const getSimilarMovies = async (id: number) => {
+    const data = await fetchMovieSimular(id);
+    if (data && data.results) setSimilarMovies(data.results);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getMovieDetails(item.id);
+    getMovieCredits(item.id);
+    getSimilarMovies(item.id);
+  }, [item]);
 
   return (
     <ScrollView
@@ -60,7 +97,7 @@ const Movie = () => {
 
         <View>
           <Image
-            source={require('../me.jpeg')}
+            source={{uri: image500(movie?.poster_path)}}
             style={{width, height: height * 0.55}}
           />
         </View>
@@ -69,33 +106,33 @@ const Movie = () => {
       {/* movie details */}
       <View className="space-y-3">
         {/* movie title */}
-        <Text className="text-white text-center text-3xl font-bold tracking-wider">
-          {movie}
+        <Text className="text-white text-center text-2xl mt-3 font-bold tracking-wider">
+          {movie?.title}
         </Text>
 
         {/* movie status */}
-        <Text className="text-neutral-400 text-center font-semibold">
-          Released - 2022
-        </Text>
+        {movie?.id ? (
+          <Text className="text-neutral-400 text-center font-semibold">
+            {movie?.status} - {movie?.release_date?.split('-')[0]} -{' '}
+            {movie?.runtime} min
+          </Text>
+        ) : null}
 
         {/* movie genres */}
         <View className="flex-row justify-center mx-4 space-x-2">
-          <Text className="text-neutral-400 text-center font-semibold">
-            Ação
-          </Text>
-
-          <Text className="text-neutral-400 text-center font-semibold">
-            Suspense
-          </Text>
-
-          <Text className="text-neutral-400 text-center font-semibold">
-            Comédia
-          </Text>
+          {movie?.genres?.map((genre, index) => {
+            let shotLine = index + 1 != movie.genres.length;
+            return (
+              <Text
+                key={index}
+                className="text-neutral-400 text-center font-semibold">
+                {genre?.name} {shotLine ? '-' : null}
+              </Text>
+            );
+          })}
         </View>
         <Text className="text-neutral-400 mx-4 tracking-wide">
-          Marvel's Spider-Man é uma série de videogames de ação e aventura
-          desenvolvidos pela Insomniac Games e publicados pela Sony Interactive
-          Entertainment para consoles PlayStation e Microsoft Windows
+          {movie?.overview}
         </Text>
       </View>
 

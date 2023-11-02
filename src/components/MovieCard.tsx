@@ -1,11 +1,11 @@
 import {Dimensions, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {image500} from '../services/api';
+import {image500} from '../constants/imagesPath';
 const {width, height} = Dimensions.get('window');
 
 const MovieCard = ({item, handleClick}) => {
   return (
-    <TouchableOpacity onPress={handleClick}>
+    <TouchableOpacity onPress={handleClick} style={{marginBottom: 20}}>
       <Image
         source={{
           uri: image500(item.poster_path),

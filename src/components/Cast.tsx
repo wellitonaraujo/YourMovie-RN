@@ -1,9 +1,9 @@
 import {View, Text, ScrollView, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
+import {image185} from '../constants/imagesPath';
 
 const Cast = ({cast, navigation}) => {
   let person = 'Keanu Reevs';
-  let character = 'John Wick';
 
   return (
     <View className="my-6">
@@ -13,7 +13,7 @@ const Cast = ({cast, navigation}) => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{paddingHorizontal: 15}}>
         {cast &&
-          cast.map((item, index) => {
+          cast.map((person, index) => {
             return (
               <TouchableOpacity
                 key={index}
@@ -22,18 +22,20 @@ const Cast = ({cast, navigation}) => {
                 <View className="overflow-hidden rounded-full h-20, w-20 items-center border border-neutral-500">
                   <Image
                     className="rounded-2xl  w-20 h-20"
-                    source={require('../me.jpeg')}
+                    source={{uri: image185(person?.profile_path)}}
                   />
                 </View>
 
                 <Text className="text-white text-xs mt-1">
-                  {character.length > 10
-                    ? character.slice(0, 10) + '...'
-                    : character}
+                  {person.character.length > 10
+                    ? person.character.slice(0, 10) + '...'
+                    : person.character}
                 </Text>
 
                 <Text className="text-neutral-400 text-xs mt-1">
-                  {person.length > 10 ? person.slice(0, 10) + '...' : person}
+                  {person.original_name.length > 10
+                    ? person.original_name.slice(0, 10) + '...'
+                    : person.original_name}
                 </Text>
               </TouchableOpacity>
             );

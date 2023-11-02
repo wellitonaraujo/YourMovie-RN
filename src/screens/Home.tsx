@@ -11,15 +11,47 @@ import {MagnifyingGlassIcon} from 'react-native-heroicons/outline';
 import TrendingMovies from '../components/TrendingMovies';
 import MovieList from '../components/MovieList';
 import BarIcon from '../components/BarIcon';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {styles} from '../styles';
+import {
+  fetchTopRatedMovies,
+  fetchTrendingMovies,
+  fetchUpcomingMovies,
+} from '../services/api';
 
 const isOS = Platform.OS == 'ios';
 
 const Home = () => {
-  const [trending, setTrending] = useState([1, 2, 3]);
-  const [upcoming, setUpcoming] = useState([1, 2, 3]);
-  const [topRated, setTopRated] = useState([1, 2, 3]);
+  const [trending, setTrending] = useState([]);
+  const [upcoming, setUpcoming] = useState([]);
+  const [topRated, setTopRated] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    getTrendingMovies();
+    getUpcomingMovies();
+    getTopRatedMovies();
+  }, []);
+
+  const getTrendingMovies = async () => {
+    const data = await fetchTrendingMovies();
+    if (data && data.results) setTrending(data.results);
+
+    setLoading(false);
+  };
+
+  const getUpcomingMovies = async () => {
+    const data = await fetchUpcomingMovies();
+    if (data && data.results) setUpcoming(data.results);
+    setLoading(false);
+  };
+
+  const getTopRatedMovies = async () => {
+    const data = await fetchTopRatedMovies();
+
+    if (data && data.results) setTopRated(data.results);
+    setLoading(false);
+  };
 
   return (
     <View className="flex-1 bg-neutral-800">
@@ -40,8 +72,12 @@ const Home = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: 10}}>
-        <TrendingMovies data={trending} />
+        {trending.length > 0 && <TrendingMovies data={trending} />}
+
+        {/* Trending Movies carousel */}
         <MovieList title={'Em breve'} hideSeeAll={false} data={upcoming} />
+
+        {/* top rated movies */}
         <MovieList
           title={'Melhores avaliados'}
           hideSeeAll={false}

@@ -6,9 +6,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
-import {MagnifyingGlassIcon} from 'react-native-heroicons/outline';
+import React from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {image185} from '../constants/imagesPath';
 import {styles} from '../styles';
 interface TrendingMoviesProps {
   title: string;
@@ -18,53 +18,56 @@ interface TrendingMoviesProps {
 
 const {width, height} = Dimensions.get('window');
 
-const MovieList: React.FC<TrendingMoviesProps> = ({
-  title,
-  hideSeeAll,
-  data,
-}) => {
-  const [loading, setLoading] = useState(true);
+const MovieList = ({title, data, hideSeeAll}: TrendingMoviesProps) => {
   const navigation = useNavigation();
-
-  const movie = 'Um fime top e muito maluco pode pah';
 
   return (
     <View className="mb-8 space-y-4">
       <View className="mx-4 flex-row justify-between items-center">
-        <Text className="text-white text-xl">{title}</Text>
+        <Text className="text-white text-lg">{title}</Text>
 
-        {!hideSeeAll && (
+        {/* {!hideSeeAll && (
           <TouchableOpacity>
-            <Text style={styles.text} className="text-lg">
+            <Text style={styles.text} className="text-sg">
               Ver tudo
             </Text>
           </TouchableOpacity>
         )}
+        */}
       </View>
 
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{paddingHorizontal: 15}}>
-        {data.map((item, index) => {
-          return (
-            <TouchableOpacity
-              key={index}
-              onPress={() => navigation.navigate('Movie', item)}>
-              <View className="space-y-1 mr-1">
-                <Image
-                  source={require('../me.jpeg')}
-                  className="rounded-3xl"
-                  style={{width: width * 0.33, height: height * 0.22}}
-                />
-              </View>
+        {data && Array.isArray(data) ? (
+          data.map((item, index) => {
+            return (
+              <TouchableOpacity
+                key={index}
+                onPress={() => navigation.navigate('Movie', item)}>
+                <View className="space-y-1 mr-4">
+                  <Image
+                    source={{uri: image185(item.poster_path)}}
+                    className="rounded-3xl"
+                    style={{width: width * 0.33, height: height * 0.22}}
+                  />
+                </View>
 
-              <Text className="text-neutral-300 ml-1">
-                {movie.length > 14 ? movie.slice(0, 14) + '...' : movie}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
+                {/* <Text className="text-neutral-300 mt-2">
+                  {item && item.title
+                    ? item.title.length > 15
+                      ? item.title.slice(0, 15) + '...'
+                      : item.title
+                    : 'Sem título'}
+                </Text>
+                */}
+              </TouchableOpacity>
+            );
+          })
+        ) : (
+          <Text>'Nenhum dado disponível'</Text>
+        )}
       </ScrollView>
     </View>
   );
